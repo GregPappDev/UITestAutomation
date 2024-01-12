@@ -26,4 +26,6 @@ public class LogInPage {
 
     @FindBy(xpath = "//*[contains(text(), 'Epic sadface: Password is required')]")
     private WebElement loginErrorMessage;
+
+
 }
