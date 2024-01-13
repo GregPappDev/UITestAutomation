@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
@@ -30,6 +31,8 @@ public class LogInTest {
     @BeforeTest
 
     public void setup(String browserType) throws MalformedURLException{
+        if(this.driver != null) driver.close();
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
         if(browserType.equalsIgnoreCase("chrome")){
@@ -58,6 +61,30 @@ public class LogInTest {
         String title = driver.findElement(By.className("title")).getText();
 
         Assert.assertEquals(title, "Products");
+
+    }
+
+    @Test
+    public void LoginToWebsite_UnSuccessful_WithUserNameOnly() throws InterruptedException {
+
+        logInService.loginToWebsite("username", "");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'sadface')]")));
+        String errorMessage = logInPage.getLoginErrorMessage().getText();
+
+        Assert.assertEquals(errorMessage, "Epic sadface: Password is required");
+
+    }
+
+    @Test
+    public void LoginToWebsite_UnSuccessful_WithEmptyCredentials() throws InterruptedException {
+
+        logInService.loginToWebsite("", "");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'sadface')]")));
+        String errorMessage = logInPage.getLoginErrorMessage().getText();
+
+        Assert.assertEquals(errorMessage, "Epic sadface: Username is required");
 
     }
 
