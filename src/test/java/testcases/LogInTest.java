@@ -18,7 +18,8 @@ import services.LogInService;
 
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+
 
 public class LogInTest {
 
@@ -26,6 +27,7 @@ public class LogInTest {
     private LogInService logInService;
     private LogInPage logInPage;
     private WebDriverWait wait;
+    final private URI gridUrl = URI.create("http://localhost:4445");
 
     @Parameters("browser")
     @BeforeTest
@@ -46,7 +48,7 @@ public class LogInTest {
             System.out.println(("Test Case Execution Started On ==> " + browserType));
         }
 
-        driver = new RemoteWebDriver(new URL("http://localhost:4445"), capabilities);
+        driver = new RemoteWebDriver(gridUrl.toURL(), capabilities);
         logInPage = new LogInPage(driver);
         wait = new WebDriverWait(driver, 5);
         logInService = new LogInService(driver, logInPage, wait);
@@ -61,7 +63,6 @@ public class LogInTest {
         String title = driver.findElement(By.className("title")).getText();
 
         Assert.assertEquals(title, "Products");
-
     }
 
     @Test
@@ -73,7 +74,17 @@ public class LogInTest {
         String errorMessage = logInPage.getLoginErrorMessage().getText();
 
         Assert.assertEquals(errorMessage, "Epic sadface: Password is required");
+    }
 
+    @Test
+    public void LoginToWebsite_UnSuccessful_WithIncorrectCredentials() throws InterruptedException {
+
+        logInService.loginToWebsite("wrongUsername", "wrongPassword");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'sadface')]")));
+        String errorMessage = logInPage.getLoginErrorMessage().getText();
+
+        Assert.assertEquals(errorMessage, "Epic sadface: Username and password do not match any user in this service");
     }
 
     @Test
@@ -85,9 +96,7 @@ public class LogInTest {
         String errorMessage = logInPage.getLoginErrorMessage().getText();
 
         Assert.assertEquals(errorMessage, "Epic sadface: Username is required");
-
     }
-
 
     @AfterTest
     public void closeDriver(){
