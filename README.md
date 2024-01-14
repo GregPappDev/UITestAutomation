@@ -13,7 +13,7 @@
 
 The primary goal of this demo app is to showcase how how to run automated tests in Selenium Grid using Docker containers. For this I used Sauce Labs' demo website: [https://www.saucedemo.com/](https://www.saucedemo.com/) 
 
-The project uses Java and TestNG for the automated tests. Three different browsers (Chrome, Firefox, Edge) run in three separate containers orchestrated by the fourth container running Selenium Grid. When launching the tests they are tested in all three browsers
+The project uses Java and TestNG for the automated tests. Three different browsers (Chrome, Firefox, Edge) run in three separate containers orchestrated by the fourth container running Selenium Grid. When launching the tests they run parallel in all three browsers.
 
 ## Installation and Usage Instructions
 <ol>
