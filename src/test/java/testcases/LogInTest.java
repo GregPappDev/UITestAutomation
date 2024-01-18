@@ -36,7 +36,20 @@ public class LogInTest {
     public void setup(String browserType) throws MalformedURLException{
         if(this.driver != null) driver.close();
 
-        driver = SetupRemoteWebDriver.driverSetup(browserType);
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        if(browserType.equalsIgnoreCase("chrome")){
+            capabilities.setBrowserName(BrowserType.CHROME);
+            System.out.println(("Test Case Execution Started On ==> " + browserType));
+        } else if(browserType.equalsIgnoreCase("firefox")){
+            capabilities.setBrowserName(BrowserType.FIREFOX);
+            System.out.println(("Test Case Execution Started On ==> " + browserType));
+        } else {
+            capabilities.setBrowserName(BrowserType.EDGE);
+            System.out.println(("Test Case Execution Started On ==> " + browserType));
+        }
+
+        driver = new RemoteWebDriver(gridUrl.toURL(), capabilities);
 
         logInPage = new LogInPage(driver);
         wait = new WebDriverWait(driver, 5);
