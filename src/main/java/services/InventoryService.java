@@ -1,5 +1,7 @@
 package services;
 
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.InventoryPage;
 import org.openqa.selenium.WebElement;
 
@@ -8,6 +10,10 @@ import java.util.List;
 public class InventoryService {
 
     private InventoryPage inventoryPage;
+
+    public InventoryService(WebDriver driver, WebDriverWait wait, InventoryPage inventoryPage) {
+        this.inventoryPage = inventoryPage;
+    }
 
     public void AddFirstItemToCart(){
         if(inventoryPage.getAllAddToCartButtons().size() > 0){

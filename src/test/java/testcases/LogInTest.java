@@ -15,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import pages.LogInPage;
 import services.LogInService;
+import utils.SetupRemoteWebDriver;
 
 
 import java.net.MalformedURLException;
@@ -35,20 +36,8 @@ public class LogInTest {
     public void setup(String browserType) throws MalformedURLException{
         if(this.driver != null) driver.close();
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+        driver = SetupRemoteWebDriver.driverSetup(browserType);
 
-        if(browserType.equalsIgnoreCase("chrome")){
-            capabilities.setBrowserName(BrowserType.CHROME);
-            System.out.println(("Test Case Execution Started On ==> " + browserType));
-        } else if(browserType.equalsIgnoreCase("firefox")){
-            capabilities.setBrowserName(BrowserType.FIREFOX);
-            System.out.println(("Test Case Execution Started On ==> " + browserType));
-        } else {
-            capabilities.setBrowserName(BrowserType.EDGE);
-            System.out.println(("Test Case Execution Started On ==> " + browserType));
-        }
-
-        driver = new RemoteWebDriver(gridUrl.toURL(), capabilities);
         logInPage = new LogInPage(driver);
         wait = new WebDriverWait(driver, 5);
         logInService = new LogInService(driver, logInPage, wait);
